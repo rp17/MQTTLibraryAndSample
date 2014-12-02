@@ -33,6 +33,7 @@ public class TestMQTTAgent implements MqttCallback {
 		
 		MQTTAgent mqAgent = new MQTTAgent(url,nodeID,false, true, null, null );
 		mqAgent.setCallBack(new TestMQTTAgent());
+		//QoS (0-means FireAndForget which is fastest; 1- means StoreAndForwardWithDuplicate which is bit slow; 2- means StoreAndForwardWithoutDuplciate which is slowest
 		mqAgent.publish(topic, 1, publishMessage.getBytes());
 		mqAgent.subscribe(topic, 1);
 //		
