@@ -19,11 +19,11 @@ import org.eclipse.paho.client.sample.MQTTAgent;
 
 
 
-public class TestMQTTAgent implements MqttCallback {
+public class TestMQTTAgentPub implements MqttCallback {
 	
 	public static void main(String[] args) throws Exception {
 		//String nodeID = getNodeMacAddress();
-		String nodeID = "agentSub";
+		String nodeID = "agentPub";
 		String brokerIPAddress =  "127.0.0.1"; //broken in this case is running in the same computer, it can be running in a different machine 
 		int brokerPort = 1883; //default port for Really Small Message Broker - RSMB https://www.ibm.com/developerworks/community/groups/service/html/communityview?communityUuid=d5bedadd-e46f-4c97-af89-22d65ffee070
 		String topic = "shared"; //each MQTT agent can subscribe to multiple topics.  MacAddress + "In" is a default topic for each agent
@@ -36,8 +36,7 @@ public class TestMQTTAgent implements MqttCallback {
 		String publishMessage = "Node: " + nodeID + " Time: " + dateFormat.format(cal.getTime());
 		
 		MQTTAgent mqAgent = new MQTTAgent(url,nodeID,false, true, null, null );
-		mqAgent.setCallBack(new TestMQTTAgent());
-		//mqAgent.setCallBack(mqAgent);
+		mqAgent.setCallBack(new TestMQTTAgentPub());
 		//QoS (0-means FireAndForget which is fastest; 1- means StoreAndForwardWithDuplicate which is bit slow; 2- means StoreAndForwardWithoutDuplciate which is slowest
 		mqAgent.publish(topic, 1, publishMessage.getBytes());
 		mqAgent.subscribe(topic, 1);
@@ -47,18 +46,7 @@ public class TestMQTTAgent implements MqttCallback {
 			br.readLine();
 		} 
 		catch (IOException ioe) {}
-		
-		for(int i=0; i<10; i++) {
-			String hellowS = "Hello " + i; 
-			mqAgent.publish(topic, 1, hellowS.getBytes());
-		}
-		
-		try {
-			br.readLine();
-		} 
-		catch (IOException ioe) {}
 //		
-		
 //		MessageQulityOfService[] subscriptionTopicQoS = { MessageQulityOfService.StoreAndForwardWithPossibleDuplicates }; //for each subscribed topic, there is an assigned QoS level, which is intuitive.
 //		String publishTopic = nodeID + "Out"; //each MQTT agent can publish to any topics.  Default value is Mac
 //		MessageQulityOfService publishTopicQoS = MessageQulityOfService.StoreAndForwardWithPossibleDuplicates;
